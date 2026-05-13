@@ -12,7 +12,6 @@
 (function () {
   "use strict";
 
-  // Album page removals
   var node = document.querySelector(".albumCriticScoreBox");
   if (node) {
     node.remove();
@@ -63,7 +62,6 @@
     ".albumTopBox .albumHeadline{text-align:center;}";
   (document.head || document.documentElement).appendChild(style);
 
-  // Ratings page removals
   var scoreHeaders = document.querySelectorAll(".scoreHeader");
   scoreHeaders.forEach(function (header) {
     header.remove();
