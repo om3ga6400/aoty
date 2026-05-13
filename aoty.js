@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AOTY UI fixes
+// @name         Better AOTY
 // @namespace    https://github.com/om3ga6400
 // @version      0.1.0
-// @description  Remove the critic score box on album pages.
+// @description  QoL mod for AOTY
 // @author       om3ga6400
 // @match        https://www.albumoftheyear.org/album/*
 // @run-at       document-end
