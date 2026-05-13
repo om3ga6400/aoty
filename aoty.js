@@ -4,7 +4,7 @@
 // @version      0.1.0
 // @description  QoL mod for AOTY
 // @author       om3ga6400
-// @match        https://www.albumoftheyear.org/album/*
+// @match        https://www.albumoftheyear.org/*
 // @run-at       document-end
 // @grant        none
 // ==/UserScript==
@@ -12,6 +12,7 @@
 (function () {
   "use strict";
 
+  // Album page removals
   var node = document.querySelector(".albumCriticScoreBox");
   if (node) {
     node.remove();
@@ -58,7 +59,78 @@
 
   var style = document.createElement("style");
   style.textContent =
-    ".albumUserScoreBox{border-top-left-radius:6px;border-top-right-radius:6px;}" +
+    ".albumUserScoreBox{border-top-left-radius:10px;border-top-right-radius:10px;}" +
     ".albumTopBox .albumHeadline{text-align:center;}";
   (document.head || document.documentElement).appendChild(style);
+
+  // Ratings page removals
+  var scoreHeaders = document.querySelectorAll(".scoreHeader");
+  scoreHeaders.forEach(function (header) {
+    header.remove();
+  });
+
+  var rightBoxes = document.querySelectorAll(".rightBox");
+  rightBoxes.forEach(function (box) {
+    if (box.textContent.includes("User Score")) {
+      box.remove();
+    }
+  });
+
+  var ratingRows = document.querySelectorAll(".ratingRow");
+  ratingRows.forEach(function (row) {
+    if (row.textContent.includes("critic score")) {
+      row.remove();
+    }
+  });
+
+  var ratingTexts = document.querySelectorAll(".ratingText");
+  ratingTexts.forEach(function (text) {
+    if (text.textContent.includes("user score")) {
+      text.remove();
+    }
+  });
+
+  var covers = document.querySelectorAll(".albumListCover.mustHear.both");
+  covers.forEach(function (cover) {
+    cover.className = "albumListCover mustHear user";
+  });
+
+  var sections = document.querySelectorAll(".section");
+  sections.forEach(function (section) {
+    var heading = section.querySelector(".sectionHeading");
+    if (heading && heading.textContent.includes("You May Also Like")) {
+      section.remove();
+    }
+  });
+
+  var footerButtons = document.querySelectorAll(".footerButtons");
+  footerButtons.forEach(function (button) {
+    button.remove();
+  });
+
+  var headline = document.querySelector("h1.headline");
+  if (headline) {
+    headline.textContent = headline.textContent.replace(" by User Score", "").replace("Users' ", "");
+  }
+
+  var ratingTexts = document.querySelectorAll(".ratingText");
+  ratingTexts.forEach(function (text) {
+    var match = text.textContent.match(/\((\d+)\)/);
+    if (match) {
+      text.textContent = "(" + match[1] + " ratings)";
+    }
+  });
+
+  var buyAmazon = document.querySelectorAll(".buyAmazon");
+  buyAmazon.forEach(function (element) {
+    element.remove();
+  });
+
+  var subscribeLinks = document.querySelectorAll("a[href='/subscribe/']");
+  subscribeLinks.forEach(function (link) {
+    var parent = link.parentElement;
+    if (parent) {
+      parent.remove();
+    }
+  });
 })();
