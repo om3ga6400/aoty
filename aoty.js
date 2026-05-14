@@ -108,7 +108,9 @@
 
   var headline = document.querySelector("h1.headline");
   if (headline) {
-    headline.textContent = headline.textContent.replace(" by User Score", "").replace("Users' ", "");
+    headline.textContent = headline.textContent
+      .replace(" by User Score", "")
+      .replace("Users' ", "");
   }
 
   var ratingTexts = document.querySelectorAll(".ratingText");
@@ -129,6 +131,21 @@
     var parent = link.parentElement;
     if (parent) {
       parent.remove();
+    }
+  });
+
+  var scoreValueContainers = document.querySelectorAll(
+    ".scoreValueContainer[title]",
+  );
+  scoreValueContainers.forEach(function (container) {
+    var rawScore = container.getAttribute("title");
+    if (!rawScore) {
+      return;
+    }
+
+    var scoreValue = container.querySelector(".scoreValue");
+    if (scoreValue) {
+      scoreValue.textContent = rawScore;
     }
   });
 })();
