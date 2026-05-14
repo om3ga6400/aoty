@@ -12,30 +12,39 @@
 (function () {
   "use strict";
 
-  var node = document.querySelector(".albumCriticScoreBox");
-  if (node) {
-    node.remove();
+  function removeOne(selector) {
+    var element = document.querySelector(selector);
+    if (element) {
+      element.remove();
+    }
   }
 
-  var userScoreHeading = document.querySelector(".albumUserScoreBox .heading");
-  if (userScoreHeading) {
-    userScoreHeading.remove();
+  function removeAll(selector) {
+    document.querySelectorAll(selector).forEach(function (element) {
+      element.remove();
+    });
   }
 
-  var noUnderlineLinks = document.querySelectorAll("a.noUnderline");
-  noUnderlineLinks.forEach(function (link) {
-    link.remove();
-  });
-
-  var criticsSection = document.getElementById("critics");
-  if (criticsSection) {
-    criticsSection.remove();
+  function setText(selector, text) {
+    var element = document.querySelector(selector);
+    if (element) {
+      element.textContent = text;
+    }
   }
 
-  var mustHearButton = document.querySelector(".mustHearButton.user");
-  if (mustHearButton) {
-    mustHearButton.remove();
+  function replaceText(selector, transform) {
+    var element = document.querySelector(selector);
+    if (element) {
+      element.textContent = transform(element.textContent);
+    }
   }
+
+  removeOne(".albumCriticScoreBox");
+  removeOne(".artistCriticScoreBox");
+  removeOne(".albumUserScoreBox .heading");
+  removeOne("#critics");
+  removeOne(".mustHearButton.user");
+  removeAll("a.noUnderline");
 
   var showMoreStats = document.querySelector(".action.showMoreStats");
   if (showMoreStats) {
@@ -58,94 +67,97 @@
 
   var style = document.createElement("style");
   style.textContent =
-    ".albumUserScoreBox{border-top-left-radius:10px;border-top-right-radius:10px;}" +
+    ".albumUserScoreBox,.artistUserScoreBox{border-top-left-radius:10px;border-top-right-radius:10px;}" +
     ".albumTopBox .albumHeadline{text-align:center;}";
   (document.head || document.documentElement).appendChild(style);
 
-  var scoreHeaders = document.querySelectorAll(".scoreHeader");
-  scoreHeaders.forEach(function (header) {
-    header.remove();
-  });
+  removeAll(".scoreHeader");
+  setText("a[href='?type=featured&s=user']", "Score");
 
-  var rightBoxes = document.querySelectorAll(".rightBox");
-  rightBoxes.forEach(function (box) {
+  var featuredCriticTab = document.querySelector(
+    "a[href='?type=featured&s=critic']",
+  );
+  if (featuredCriticTab) {
+    var listItem = featuredCriticTab.closest("li");
+    if (listItem) {
+      listItem.remove();
+    }
+  }
+
+  document.querySelectorAll(".rightBox").forEach(function (box) {
     if (box.textContent.includes("User Score")) {
       box.remove();
     }
   });
 
-  var ratingRows = document.querySelectorAll(".ratingRow");
-  ratingRows.forEach(function (row) {
+  document.querySelectorAll(".ratingRow").forEach(function (row) {
     if (row.textContent.includes("critic score")) {
       row.remove();
     }
   });
 
-  var ratingTexts = document.querySelectorAll(".ratingText");
-  ratingTexts.forEach(function (text) {
+  document.querySelectorAll(".ratingText").forEach(function (text) {
     if (text.textContent.includes("user score")) {
       text.remove();
     }
   });
 
-  var covers = document.querySelectorAll(".albumListCover.mustHear.both");
-  covers.forEach(function (cover) {
-    cover.className = "albumListCover mustHear user";
-  });
+  document
+    .querySelectorAll(
+      ".image.mustHear.user, .image.mustHear.both, .image.mustHear.critic",
+    )
+    .forEach(function (image) {
+      image.className = "image";
+    });
 
-  var sections = document.querySelectorAll(".section");
-  sections.forEach(function (section) {
+  document
+    .querySelectorAll(".mustHear > i.fas.fa-star")
+    .forEach(function (star) {
+      var container = star.parentElement;
+      if (container) {
+        container.remove();
+      }
+    });
+
+  document.querySelectorAll(".section").forEach(function (section) {
     var heading = section.querySelector(".sectionHeading");
     if (heading && heading.textContent.includes("You May Also Like")) {
       section.remove();
     }
   });
 
-  var footerButtons = document.querySelectorAll(".footerButtons");
-  footerButtons.forEach(function (button) {
-    button.remove();
+  removeAll(".footerButtons");
+  removeAll(".buyAmazon");
+
+  replaceText("h1.headline", function (text) {
+    return text.replace(" by User Score", "").replace("Users' ", "");
   });
 
-  var headline = document.querySelector("h1.headline");
-  if (headline) {
-    headline.textContent = headline.textContent
-      .replace(" by User Score", "")
-      .replace("Users' ", "");
-  }
-
-  var ratingTexts = document.querySelectorAll(".ratingText");
-  ratingTexts.forEach(function (text) {
+  document.querySelectorAll(".ratingText").forEach(function (text) {
     var match = text.textContent.match(/\((\d+)\)/);
     if (match) {
       text.textContent = "(" + match[1] + " ratings)";
     }
   });
 
-  var buyAmazon = document.querySelectorAll(".buyAmazon");
-  buyAmazon.forEach(function (element) {
-    element.remove();
-  });
-
-  var subscribeLinks = document.querySelectorAll("a[href='/subscribe/']");
-  subscribeLinks.forEach(function (link) {
+  document.querySelectorAll("a[href='/subscribe/']").forEach(function (link) {
     var parent = link.parentElement;
     if (parent) {
       parent.remove();
     }
   });
 
-  var scoreValueContainers = document.querySelectorAll(
-    ".scoreValueContainer[title]",
-  );
-  scoreValueContainers.forEach(function (container) {
-    var rawScore = container.getAttribute("title");
-    if (!rawScore) {
-      return;
-    }
+  document
+    .querySelectorAll(".scoreValueContainer[title]")
+    .forEach(function (container) {
+      var rawScore = container.getAttribute("title");
+      if (!rawScore) {
+        return;
+      }
 
-    var scoreValue = container.querySelector(".scoreValue");
-    if (scoreValue) {
-      scoreValue.textContent = rawScore;
-    }
-  });
+      var scoreValue = container.querySelector(".scoreValue");
+      if (scoreValue) {
+        scoreValue.textContent = rawScore;
+      }
+    });
 })();
